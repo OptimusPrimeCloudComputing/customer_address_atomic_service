@@ -14,7 +14,7 @@ from models.health import Health
 port = int(os.environ.get("FASTAPIPORT", 8001))
 
 app = FastAPI(
-    title="Address Atomic API",
+    title="Customer Address Atomic Microservice",
     description="Atomic service for managing address data (keyed by address_id, linked by university_id).",
     version="0.0.1",
 )
