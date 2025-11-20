@@ -6,8 +6,6 @@ from datetime import date, datetime
 from pydantic import BaseModel, Field, StringConstraints
 from typing_extensions import Annotated
 
-from .address import AddressBase
-
 # Email must end with .edu
 EduEmail = Annotated[str, StringConstraints(pattern=r"^[\w\.-]+@[\w\.-]+\.edu$", strip_whitespace=True)]
 CourseIDType = Annotated[str, StringConstraints(pattern=r"^[A-Z]{2,4}\d{3,4}$")]
