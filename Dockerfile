@@ -1,35 +1,26 @@
-# Use official Python 3.12 image
 FROM python:3.12-slim
 
-# Set environment variables
+# Environment
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# Install system dependencies (optional — useful for many libs)
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Create working directory
 WORKDIR /app
 
-# Copy requirements first for better caching
-COPY requirements.txt .
+# Install system deps
+RUN apt-get update && apt-get install -y build-essential \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Install Python dependencies
+# Copy requirements and install
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application code
+# Copy app code
 COPY . .
 
-# Create a non-root user for security
+# Optional: non-root user
 RUN useradd -m appuser
 USER appuser
 
-# Expose FastAPI port
-EXPOSE 8080
-
-# Start FastAPI app with Uvicorn
-# Replace "main:app" with your module and app name
-CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT:-8080}"]
-
+# Cloud Run sets PORT=8080
+# Use shell form to expand PORT env variable
+CMD sh -c "uvicorn main:app --host 0.0.0.0 --port ${PORT:-8080}"
