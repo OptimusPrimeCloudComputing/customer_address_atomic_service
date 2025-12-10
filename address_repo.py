@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from typing import List, Any
-from uuid import UUID
+from uuid import UUID, uuid1
 
 from sqlalchemy import Column, String, DateTime
 from sqlalchemy.sql import func
@@ -53,18 +53,19 @@ class AddressRepository:
         )
 
     def create(self, address_in: AddressCreate) -> AddressRead:
+        new_id = uuid1()
         existing = (
             self.db.query(Address)
-            .filter(Address.address_id == str(address_in.address_id))
+            .filter(Address.address_id == str(new_id))
             .first()
         )
         if existing:
             raise AddressAlreadyExists(
-                f"Address with id '{address_in.address_id}' already exists."
+                f"Address with id '{new_id}' already exists."
             )
 
         db_address = Address(
-            address_id=str(address_in.address_id),
+            address_id=str(new_id),
             university_id=address_in.university_id,
             street=address_in.street,
             city=address_in.city,

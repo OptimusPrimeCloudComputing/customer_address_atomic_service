@@ -70,6 +70,7 @@ class AddressCreate(AddressBase):
         "json_schema_extra": {
             "examples": [
                 {
+                    "address_id": "99999999-9999-4999-8999-999999999999",
                     "university_id": "UNI1234",
                     "street": "123 Broadway Ave",
                     "city": "New York",
