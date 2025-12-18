@@ -37,40 +37,39 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Define constants for connection details
-db_user = os.environ.get("MYSQL_USER", "myapp_user")
-db_pass = os.environ.get("MYSQL_PASSWORD", "Password_123")
+db_user = os.environ.get("MYSQL_USER", "root")
+db_pass = os.environ.get("MYSQL_PASSWORD", "e7?p>Xp+MreTh~#")
 db_name = os.environ.get("MYSQL_DB", "addresses")
-db_host = os.environ.get("MYSQL_HOST", "34.10.129.69")
+db_host = os.environ.get("MYSQL_HOST", "localhost")
 db_port = int(os.environ.get("MYSQL_PORT", 3306))
 connection_name = os.environ.get("INSTANCE_CONNECTION_NAME")
 
-# DETECT WINDOWS (Force TCP)
-if os.name == 'nt':
-    print("--- DETECTED WINDOWS: Ignoring Unix Socket configuration ---")
-    connection_name = None
+print(connection_name)
 
 # BUILD THE URL OBJECT SAFELY
 # This method automatically handles special characters like '@' in passwords
-if connection_name:
-    # Cloud Run (Unix Socket)
-    connection_url = URL.create(
-        drivername="mysql+pymysql",
-        username=db_user,
-        password=db_pass,
-        database=db_name,
-        query={"unix_socket": f"/cloudsql/{connection_name}"}
-    )
+# if connection_name:
+#     # Cloud Run (Unix Socket)
+#     connection_url = URL.create(
+#         drivername="mysql+pymysql",
+#         username=db_user,
+#         password=db_pass,
+#         database=db_name,
+#         query={"unix_socket": f"/cloudsql/{connection_name}"}
+#     )
+#     print(connection_url)
 
-else:
-    # Local (TCP)
-    connection_url = URL.create(
-        drivername="mysql+pymysql",
-        username=db_user,
-        password=db_pass,
-        host=db_host,
-        port=db_port,
-        database=db_name
-    )
+# else:
+# Local (TCP)
+connection_url = URL.create(
+    drivername="mysql+pymysql",
+    username=db_user,
+    password=db_pass,
+    host=db_host,
+    port=db_port,
+    database=db_name
+)
+print(connection_url)
 
 # CREATE ENGINE
 engine = create_engine(connection_url)
@@ -86,7 +85,7 @@ def get_db():
         db.close()
 
 
-if __name__ == "__main__":
+if __name__== "__main__":
     try:
         print(f"--- ATTEMPTING CONNECTION TO: {db_host} ---")
         with engine.connect() as connection:
